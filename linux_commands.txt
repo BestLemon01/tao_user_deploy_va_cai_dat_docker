@@ -1,0 +1,26 @@
+DANH SÁCH LỆNH LINUX THỰC THI THIẾT LẬP USER DEPLOY & DOCKER
+
+1. Tạo user 'deploy' và thêm vào nhóm sudo:
+   $ sudo adduser deploy
+   $ sudo usermod -aG sudo deploy
+
+2. Cài đặt Docker từ kho APT chính thức:
+   $ sudo apt update
+   $ sudo apt install -y ca-certificates curl gnupg lsb-release
+   $ sudo install -m 0755 -d /etc/apt/keyrings
+   $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   $ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+   $ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   $ sudo apt update
+   $ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+3. Phân quyền chạy Docker không cần sudo cho user deploy:
+   $ sudo usermod -aG docker deploy
+   $ newgrp docker
+
+4. Kiểm tra phiên bản hoạt động:
+   $ su - deploy
+   $ whoami
+   $ docker --version
+   $ docker compose version
+   $ docker run --rm hello-world
